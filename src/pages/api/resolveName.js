@@ -19,17 +19,21 @@ export default async function handler(req, res) {
   const hashedName = BigInt(keccak256(toUtf8Bytes(name))).toString();
 
   try {
-    const resolvedAddress = await selfNft.ownerOf(hashedName);
+    let resolvedAddress;
+    try {
+      resolvedAddress = await selfNft.ownerOf(hashedName);
+    } catch (error) {
+      return res.status(400).json({ message: "Name is not registered yet." });
+    }
+
     const tokenUri = await selfNft.tokenURI(hashedName);
 
     const response = await fetch(`${createGatewayLink(tokenUri)}`);
 
     const metadata = await response.json();
-    console.log("metadata", metadata);
 
     if (chain) {
       const chainAddress = metadata.foreignAddresses?.[chain].address;
-      console.log("chainAddress", chainAddress);
       if (chainAddress) {
         return res.status(200).json({
           name,
