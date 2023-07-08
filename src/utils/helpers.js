@@ -1,6 +1,6 @@
 export function createGatewayLink(ipfsLink) {
   const ipfsPrefix = "ipfs://";
-  const gatewayPrefix = "https://cloudflare-ipfs.com/ipfs/";
+  const gatewayPrefix = "https://nftstorage.link/ipfs/";
 
   if (ipfsLink.startsWith(ipfsPrefix)) {
     const cid = ipfsLink.substring(ipfsPrefix.length);
